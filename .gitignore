@@ -4,7 +4,8 @@ venv/
 *.zip
 *.mat
 *.asv
+*.7z
 images/
-road_unsupervised
+road_unsupervised/
 __pycache__/
 !mppi_data/*
