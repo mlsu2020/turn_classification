@@ -1,0 +1,41 @@
+# Produced by CVXGEN, 2019-07-09 09:48:03 -0400.
+# CVXGEN is Copyright (C) 2006-2017 Jacob Mattingley, jem@cvxgen.com.
+# The code in this file is Copyright (C) 2006-2017 Jacob Mattingley.
+# CVXGEN, or solvers produced by CVXGEN, cannot be used for commercial
+# applications without prior written permission from Jacob Mattingley.
+
+# Filename: description.cvxgen.
+# Description: A description of the CVXGEN problem.
+
+dimensions
+  nx = 8
+  nu = 2
+  N = 12 # Horizon
+end
+
+parameters
+  A[t](nx, nx),t=0..N
+  B[t](nx, nu),t=0..N
+  d[t](nx),t=0..N
+  Q (nx,nx) psd
+  QT (nx,nx) psd #Terminal Cost
+  R (nu,nu) psd
+  x[0] (nx) # Initial State
+  target (nx) # Target state
+  xmin (nx)
+  half_road_width nonnegative
+  umax (nu) nonnegative
+end
+
+variables
+  x[t] (nx), t = 1..N+1 # State
+  u[t] (nu), t = 0..N # Input
+end
+
+minimize
+  sum[t=0..N](quad((x[t]-target), Q) + quad(u[t], R )) + quad((x[N+1]-target), QT)
+subject to
+  x[t+1] == A[t]*x[t] + B[t]*u[t] + d[t], t=0..N
+  -half_road_width <= x[t][7] <= half_road_width, t=1..N+1
+  abs(u[t]) <= umax, t=0..N
+end
