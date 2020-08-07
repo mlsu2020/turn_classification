@@ -1,0 +1,8 @@
+*.bag
+.idea/
+venv/
+*.zip
+*.mat
+*.asv
+__pycache__/
+!mppi_data/*
